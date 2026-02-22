@@ -3,178 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Data Workflow - Handout</title>
+    <title>Data to Differentiation | BISP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&display=swap');
         :root { --bisp-blue: #0975A7; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f1f5f9; 
+            color: #1e293b; 
+            line-height: 1.6;
+        }
+        
         h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; }
         
-        .flow-container { position: relative; }
-        
         .flow-node { 
-            @apply bg-white p-8 rounded-2xl shadow-lg border-l-8 relative z-10; 
-            transition: transform 0.2s ease; 
+            @apply bg-white p-8 rounded-3xl shadow-lg border-l-8 relative mb-12; 
+            border-left-color: var(--bisp-blue);
         }
-        .flow-node:hover { transform: scale(1.01); }
         
-        .node-spacing { margin-bottom: 3rem; }
+        .tool-badge { 
+            @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest mb-4;
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
         
-        .connector { 
-            @apply absolute left-8 w-1 bg-slate-200 -z-0; 
-            top: 0; 
-            bottom: 0; 
-        }
-
-        .tool-badge {
-            @apply inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-3;
-        }
-        .badge-notebook { @apply bg-teal-50 text-teal-700 border border-teal-100; }
-        .badge-gemini { @apply bg-indigo-50 text-indigo-700 border border-indigo-100; }
-
         .ai-explain { 
-            @apply mt-4 p-4 bg-blue-50/50 rounded-xl border border-blue-100 text-sm text-slate-700 leading-relaxed; 
+            @apply mt-6 p-5 bg-blue-50 rounded-2xl border border-blue-100 text-sm text-slate-700 leading-relaxed;
         }
-        .ai-explain strong { @apply text-[#0975A7]; }
+        .ai-explain strong { color: var(--bisp-blue); }
         
-        pre { 
-            @apply bg-slate-900 text-teal-400 p-4 rounded-xl text-xs border-l-4 border-teal-500 font-mono shadow-inner my-3; 
-            white-space: pre-wrap; 
-        }
-
-        .bridge-box, .intro-callout { 
-            padding: 1.5rem; 
-            border-radius: 1rem; 
-            display: flex; 
-            align-items: center; 
-            gap: 1.5rem; 
-            position: relative; 
-            z-10; 
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); 
+        .prompt-box { 
+            @apply bg-slate-900 text-teal-400 p-6 rounded-2xl text-xs border-l-4 border-teal-500 font-mono shadow-2xl my-5 cursor-pointer transition-all hover:bg-slate-800 active:scale-[0.98];
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
         
-        .bridge-box { 
-            background-color: #f0fdfa; 
-            border: 3px dashed #14b8a6; 
-            margin: 0 1rem 3rem 1rem; 
+        .section-break {
+            @apply my-16 py-8 border-y border-slate-200 text-center;
         }
         
-        .intro-callout { 
-            background-color: #f0f9ff; 
-            border: 3px dashed #0975A7; 
-            margin: 3rem 0; 
-        }
-
         .tip-box { 
-            @apply bg-slate-50 border border-slate-200 p-4 rounded-xl text-sm italic text-slate-600 relative mt-4; 
+            @apply bg-slate-50 border border-slate-200 p-5 rounded-2xl text-sm italic text-slate-600 relative mt-6;
         }
         .tip-box::before { 
             content: "\f0eb"; 
             font-family: "Font Awesome 6 Free"; 
             font-weight: 900; 
-            @apply mr-2 text-amber-500; 
+            @apply mr-3 text-amber-500; 
         }
 
-        @media print { 
-            .no-print { display: none; } 
-            body { background: white; padding: 0; } 
-            .flow-node { break-inside: avoid; } 
+        @media print {
+            .no-print { display: none; }
+            body { background: white; padding: 0; }
+            .max-w-4xl { max-width: 100%; }
+            .flow-node { break-inside: avoid; shadow: none; border: 1px solid #ddd; border-l-8; }
         }
     </style>
 </head>
-<body class="p-4 md:p-12">
-    <div class="max-w-6xl mx-auto">
-        <header class="bg-[#0975A7] rounded-3xl p-10 mb-12 text-white shadow-2xl relative text-center md:text-left">
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-3">Data to Differentiation</h1>
-            <p class="text-blue-100 text-xl font-light">A Precision Workflow for Every Learner</p>
+<body class="p-6 md:p-12">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="bg-[#0975A7] rounded-[40px] p-10 md:p-16 mb-16 text-white shadow-2xl relative overflow-hidden text-center md:text-left">
+            <div class="relative z-10">
+                <h1 class="text-4xl md:text-7xl font-extrabold mb-4 tracking-tight">Data to Differentiation</h1>
+                <p class="text-blue-100 text-xl md:text-3xl font-light">A Precision Workflow for Every Learner</p>
+            </div>
+            <i class="fa-solid fa-robot absolute -right-10 -bottom-10 text-white/10 text-[200px]"></i>
         </header>
 
-        <!-- Intro Callout explaining question-level data -->
-        <div class="intro-callout">
-            <div class="bg-[#0975A7] text-white p-4 rounded-full shadow-lg shrink-0"><i class="fa-solid fa-chart-line text-xl"></i></div>
-            <div>
-                <h4 class="text-[#0975A7] font-bold mb-1">Granular Insights over Final Marks</h4>
-                <p class="text-slate-700 text-sm md:text-base">When your <strong>tracking sheet</strong> includes marks for specific questions or topics (e.g. <em>Q1: Fractions</em>, <em>Q4: Decimals</em>), AI can spot the story behind the grade. Seeing that a student scored 70% overall but got 0/5 on Decimal Addition allows for <strong>precisely targeted support</strong> that a single percentage would hide.</p>
-            </div>
+        <!-- Intro Content (Formerly in Call-out) -->
+        <div class="mb-16 px-4">
+            <h2 class="text-[#0975A7] text-2xl font-bold mb-4 flex items-center gap-3">
+                <i class="fa-solid fa-chart-line"></i>
+                Granular Insights over Final Marks
+            </h2>
+            <p class="text-slate-700 text-lg leading-relaxed">
+                When your <strong>tracking sheet</strong> includes marks for specific questions (e.g. <em>Q1: Fractions</em>), AI can spot the story behind the grade. This allows for <strong>precisely targeted support</strong> that a single percentage would hide.
+            </p>
         </div>
 
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            <div class="lg:col-span-8 flow-container">
-                <div class="connector"></div>
-                <h2 class="text-2xl font-extrabold text-slate-800 mb-10 pl-4 flex items-center gap-4">Workflow Steps</h2>
-
-                <!-- Step 1 -->
-                <div class="flow-node border-l-[#0975A7] node-spacing">
-                    <div class="tool-badge badge-notebook"><i class="fa-solid fa-book-open"></i> NotebookLM</div>
-                    <h3 class="text-xl font-bold text-[#0975A7] mb-2">1. Grounding & Analysis</h3>
-                    <p class="text-slate-600 mb-2">Upload your <strong>tracking sheet</strong>. This ensures the AI's "brain" is limited only to your students' actual evidence.</p>
-                    <div class="ai-explain">
-                        <strong>How AI helps:</strong> It acts as a "private expert." It reads across your whole sheet to find links between topics—instantly identifying which skills are holding students back from higher overall marks.
-                    </div>
+        <main class="space-y-4">
+            <!-- Stage 1 -->
+            <div class="flow-node">
+                <div class="tool-badge"><i class="fa-solid fa-book-open mr-2"></i> NotebookLM</div>
+                <h3 class="text-3xl font-bold text-[#0975A7] mb-4">1. Grounding & Analysis</h3>
+                <p class="text-slate-600 text-lg mb-4">Upload your <strong>tracking sheet</strong> (CSV or Google Sheet). This ensures the AI's "brain" is limited only to your students' actual evidence.</p>
+                <div class="ai-explain">
+                    <strong>How AI helps:</strong> It reads across your whole sheet to find links—instantly identifying which skills are holding students back from higher overall marks.
                 </div>
-
-                <!-- Step 2 -->
-                <div class="flow-node border-l-teal-500 node-spacing">
-                    <div class="tool-badge badge-notebook"><i class="fa-solid fa-magnifying-glass-chart"></i> NotebookLM</div>
-                    <h3 class="text-xl font-bold text-teal-600 mb-2">2. Diagnosing Misconceptions</h3>
-                    <pre class="mb-2">"Based on the results, identify which specific topics have the widest gap in class performance. Which students scored highly overall but struggled with one specific sub-topic?"</pre>
-                    <div class="ai-explain">
-                        <strong>How AI helps:</strong> It uses <strong>pattern recognition</strong> to flag "invisible" gaps—identifying students who have specific, hidden misconceptions that will block future progress.
-                    </div>
-                </div>
-
-                <!-- Bridge -->
-                <div class="bridge-box">
-                    <div class="bg-teal-500 text-white p-4 rounded-full shadow-lg shrink-0"><i class="fa-solid fa-lightbulb text-xl"></i></div>
-                    <div class="text-teal-800 text-sm md:text-base">
-                        <strong>Next Step:</strong> Take the <strong>findings</strong> from NotebookLM and pop them into <strong>Gemini</strong> to plan your support tasks.
-                    </div>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="flow-node border-l-orange-500 node-spacing">
-                    <div class="tool-badge badge-gemini"><i class="fa-solid fa-users-viewfinder"></i> Gemini</div>
-                    <h3 class="text-xl font-bold text-orange-600 mb-2">3. Strategic Grouping</h3>
-                    <pre class="mb-2">"Review these topic gaps. Group the class into three tiers based on their mastery of [Topic Name], ensuring that those with specific misconceptions are clustered together."</pre>
-                    <div class="ai-explain">
-                        <strong>How AI helps:</strong> AI assists with <strong>logistical clustering</strong>, grouping students by the specific nature of their error (e.g. the "Fractions" group) rather than just general ability.
-                    </div>
-                </div>
-
-                <!-- Step 4 -->
-                <div class="flow-node border-l-purple-500">
-                    <div class="tool-badge badge-gemini"><i class="fa-solid fa-wand-magic-sparkles"></i> Gemini</div>
-                    <h3 class="text-xl font-bold text-purple-600 mb-2">4. Resource Synthesis</h3>
-                    <p class="text-slate-600 text-sm">Generate targeted scaffolds, word banks, or challenge tasks for each identified group.</p>
-                    <div class="ai-explain">
-                        <strong>How AI helps:</strong> Through <strong>creative synthesis</strong>, Gemini can instantly create multiple versions of the same task tailored to the specific needs of each group identified in your tracking sheet.
-                    </div>
-                    <div class="tip-box"><strong>Trick:</strong> Ask Gemini to "Create a 10-minute reteach activity for the group that struggled with [Specific Topic]."</div>
-                </div>
+                <div class="prompt-box" onclick="copyToClipboard(this)">"Identify the top 3 concepts mastered and the top 2 where a significant performance gap exists across the class. Which students show a high pre-test score but struggled with the final assessment?"</div>
             </div>
 
-            <!-- Right Sidebar -->
-            <div class="lg:col-span-4 space-y-8">
-                <div class="bg-white border border-slate-200 p-8 rounded-3xl shadow-sm">
-                    <h4 class="text-xl font-bold mb-4 text-[#0975A7]">Classroom Example</h4>
-                    <div class="space-y-4">
-                        <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-orange-400 text-xs">
-                            <strong>Discovery:</strong> The tracking data shows that while most aced Algebra, a small group of high-attainers failed the <strong>Decimals</strong> section.
-                        </div>
-                        <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-orange-400 text-xs">
-                            <strong>Intervention:</strong> Gemini suggests a visual scaffold for the <strong>Decimals</strong> group while the rest move to an extension task.
-                        </div>
-                    </div>
+            <!-- Stage 2 -->
+            <div class="flow-node" style="border-left-color: #14b8a6;">
+                <div class="tool-badge" style="background-color: #f0fdfa; color: #0d9488;"><i class="fa-solid fa-magnifying-glass-chart mr-2"></i> NotebookLM</div>
+                <h3 class="text-3xl font-bold text-teal-600 mb-4">2. Diagnosing Misconceptions</h3>
+                <p class="text-slate-600 text-lg">Ask the AI to look past the totals and into the question-level data to find the 'Why'.</p>
+                <div class="ai-explain">
+                    <strong>How AI helps:</strong> It flags "invisible" gaps—identifying students who look fine on paper but have specific, hidden misconceptions in foundational topics.
                 </div>
-                <div class="no-print p-6 text-center">
-                    <button onclick="window.print()" class="bg-[#F0907C] text-white px-8 py-3 rounded-full font-bold shadow-lg w-full transition-transform hover:scale-105">
-                        <i class="fa-solid fa-print mr-2"></i> Print Handout
-                    </button>
+                <div class="prompt-box" onclick="copyToClipboard(this)">"Based on the results, identify which specific topics have the widest gap in class performance. Which students scored highly overall but struggled with one specific sub-topic (e.g. Mixed Fractions)?"</div>
+            </div>
+
+            <!-- Hand-off Content (Formerly in Bridge Box) -->
+            <div class="section-break">
+                <div class="inline-flex items-center gap-3 text-teal-600 mb-4">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-2xl"></i>
+                    <h4 class="text-xl font-bold uppercase tracking-widest">The Hand-off Phase</h4>
+                </div>
+                <p class="text-slate-600 max-w-2xl mx-auto px-4">
+                    Copy the <strong>identified gaps and student groups</strong> from NotebookLM and paste them into <strong>Gemini</strong> to generate your actual classroom resources.
+                </p>
+            </div>
+
+            <!-- Stage 3 -->
+            <div class="flow-node" style="border-left-color: #f97316;">
+                <div class="tool-badge" style="background-color: #fff7ed; color: #c2410c;"><i class="fa-solid fa-users-viewfinder mr-2"></i> Gemini</div>
+                <h3 class="text-3xl font-bold text-orange-600 mb-4">3. Strategic Grouping</h3>
+                <p class="text-slate-600 text-lg mb-4">Use Gemini to turn the data analysis into a seating plan or intervention schedule.</p>
+                <div class="ai-explain">
+                    <strong>How AI helps:</strong> It automates the heavy lifting of sorting 30+ students into meaningful clusters based on their exact needs rather than just 'High/Middle/Low'.
+                </div>
+                <div class="prompt-box" onclick="copyToClipboard(this)">"Review these gaps. Group the class into three tiers based on mastery of [Topic], ensuring those with specific misconceptions are clustered together for a focused reteach session."</div>
+            </div>
+
+            <!-- Stage 4 -->
+            <div class="flow-node" style="border-left-color: #a855f7;">
+                <div class="tool-badge" style="background-color: #faf5ff; color: #7e22ce;"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Gemini</div>
+                <h3 class="text-3xl font-bold text-purple-600 mb-4">4. Resource Synthesis</h3>
+                <p class="text-slate-600 text-lg">Generate targeted scaffolds, word banks, or challenge tasks for each identified group.</p>
+                <div class="ai-explain">
+                    <strong>How AI helps:</strong> It can instantly write three different versions of the same task, providing the 'just-right' level of support for every desk in the room.
+                </div>
+                <div class="tip-box">
+                    <strong>Expert Tip:</strong> Ask Gemini to "Create a 10-minute reteach activity for the group that struggled with [Specific Topic], including a visual analogy and 3 check-for-understanding questions."
                 </div>
             </div>
         </main>
+
+        <footer class="mt-20 flex justify-center no-print">
+            <button onclick="window.print()" class="bg-[#0975A7] text-white px-12 py-5 rounded-full font-bold shadow-2xl hover:bg-blue-800 transition transform hover:-translate-y-1 active:scale-95 text-xl">
+                <i class="fa-solid fa-print mr-3"></i> Print Handout
+            </button>
+        </footer>
     </div>
+
+    <script>
+        function copyToClipboard(element) {
+            const text = element.innerText;
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            const originalText = element.innerText;
+            element.innerText = "COPIED TO CLIPBOARD!";
+            setTimeout(() => { element.innerText = originalText; }, 1200);
+        }
+    </script>
 </body>
 </html>
