@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Teacher Toolkits | BISP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&display=swap');
+        :root { 
+            --bisp-blue: #0975A7; 
+            --wayground-purple: #7c3aed;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #1e293b; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-card {
+            @apply cursor-pointer transition-all duration-300 border-b-4 border-transparent p-4 flex items-center gap-3 font-bold text-slate-500 hover:text-slate-800;
+        }
+        .nav-card.active {
+            @apply border-[#0975A7] text-[#0975A7] bg-white rounded-t-xl;
+        }
+
+        .flow-node { @apply bg-white p-6 md:p-8 rounded-2xl shadow-lg border-l-8 relative mb-8 md:mb-12 break-words overflow-hidden; transition: transform 0.2s ease; }
+        .flow-node:hover { transform: scale(1.005); }
+        .tool-badge { @apply inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-3; }
+        
+        .ai-explain { @apply mt-4 p-4 bg-blue-50/50 rounded-xl border border-blue-100 text-sm text-slate-700 leading-relaxed break-words; }
+        .ai-explain strong { @apply text-[#0975A7]; }
+        
+        /* Fixed prompt boxes to prevent spillover */
+        .prompt-box { 
+            @apply bg-slate-900 text-teal-400 p-4 rounded-xl text-xs border-l-4 border-teal-500 font-mono shadow-inner my-3 cursor-pointer transition-colors;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .prompt-box:hover { @apply bg-slate-800; }
+        
+        .intro-callout { @apply bg-blue-50 border-2 border-dashed border-[#0975A7] p-6 rounded-2xl flex flex-col md:flex-row items-center gap-6 mb-8 md:mb-12 shadow-sm; }
+        .bridge-box { @apply bg-teal-50 border-2 border-dashed border-teal-500 p-6 rounded-2xl flex items-center gap-6 mb-8 md:mb-12 shadow-sm; }
+        
+        .tip-box { @apply bg-slate-50 border border-slate-200 p-4 rounded-xl text-sm italic text-slate-600 relative mt-4 break-words; }
+        .tip-box::before { content: "\f0eb"; font-family: "Font Awesome 6 Free"; font-weight: 900; @apply mr-2 text-amber-500; }
+
+        @media print {
+            .no-print { display: none; }
+            .tab-content.active { display: block !important; }
+            body { background: white; padding: 0; }
+            .max-w-6xl { max-width: 100%; }
+            .flow-node { break-inside: avoid; shadow: none; border: 1px solid #ddd; border-l-8; margin-bottom: 1.5rem; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50 no-print">
+        <div class="max-w-6xl mx-auto px-4 flex flex-wrap justify-between items-center">
+            <div class="py-4 flex items-center gap-2">
+                <div class="bg-[#0975A7] text-white p-2 rounded-lg"><i class="fa-solid fa-robot"></i></div>
+                <span class="font-bold text-xl tracking-tight text-slate-800">BISP AI Hub</span>
+            </div>
+            <div class="flex gap-1 md:gap-2 overflow-x-auto">
+                <div onclick="showTab('data')" id="btn-data" class="nav-card active whitespace-nowrap">
+                    <i class="fa-solid fa-chart-pie"></i> <span class="hidden md:inline">Data Guide</span>
+                </div>
+                <div onclick="showTab('prompts')" id="btn-prompts" class="nav-card whitespace-nowrap">
+                    <i class="fa-solid fa-terminal"></i> <span class="hidden md:inline">Prompt Bank</span>
+                </div>
+                <div onclick="showTab('wayground')" id="btn-wayground" class="nav-card whitespace-nowrap">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span class="hidden md:inline">Wayground</span>
+                </div>
+                <div onclick="showTab('merseyside')" id="btn-merseyside" class="nav-card whitespace-nowrap">
+                    <i class="fa-solid fa-table"></i> <span class="hidden md:inline">Sample Data</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto p-4 md:p-8">
+        
+        <!-- TAB 1: DATA TO DIFFERENTIATION -->
+        <div id="data" class="tab-content active">
+            <header class="bg-[#0975A7] rounded-3xl p-6 md:p-10 mb-8 md:mb-12 text-white shadow-2xl text-center md:text-left">
+                <h1 class="text-3xl md:text-6xl font-extrabold mb-3">Data to Differentiation</h1>
+                <p class="text-blue-100 text-lg md:text-xl font-light">A Precision Workflow for Every Learner</p>
+            </header>
+
+            <div class="intro-callout">
+                <div class="bg-[#0975A7] text-white p-4 rounded-full shadow-lg shrink-0"><i class="fa-solid fa-chart-line text-xl"></i></div>
+                <div>
+                    <h4 class="text-[#0975A7] font-bold mb-1">Granular Insights over Final Marks</h4>
+                    <p class="text-slate-700 text-sm md:text-base">When your <strong>tracking sheet</strong> includes marks for specific questions (e.g. <em>Q1: Fractions</em>), AI can spot the story behind the grade. This allows for <strong>precisely targeted support</strong> that a single percentage would hide.</p>
+                </div>
+            </div>
+
+            <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-start">
+                <div class="lg:col-span-8">
+                    <div class="flow-node border-l-[#0975A7]">
+                        <div class="tool-badge bg-teal-50 text-teal-700"><i class="fa-solid fa-book-open"></i> NotebookLM</div>
+                        <h3 class="text-xl font-bold text-[#0975A7] mb-2">1. Grounding & Analysis</h3>
+                        <p class="text-slate-600 mb-2">Upload your <strong>tracking sheet</strong>. This ensures the AI's "brain" is limited only to your students' actual evidence.</p>
+                        <div class="ai-explain">
+                            <strong>How AI helps:</strong> It reads across your whole sheet to find links—instantly identifying which skills are holding students back from higher overall marks.
+                        </div>
+                    </div>
+
+                    <div class="flow-node border-l-teal-500">
+                        <div class="tool-badge bg-teal-50 text-teal-700"><i class="fa-solid fa-magnifying-glass-chart"></i> NotebookLM</div>
+                        <h3 class="text-xl font-bold text-teal-600 mb-2">2. Diagnosing Misconceptions</h3>
+                        <div class="prompt-box" onclick="copyToClipboard(this)">"Based on the results, identify which specific topics have the widest gap in class performance. Which students scored highly overall but struggled with one specific sub-topic?"</div>
+                        <div class="ai-explain">
+                            <strong>How AI helps:</strong> It flags "invisible" gaps—identifying students who look fine on paper but have specific, hidden misconceptions.
+                        </div>
+                    </div>
+
+                    <div class="bridge-box">
+                        <div class="bg-teal-500 text-white p-4 rounded-full shadow-lg shrink-0"><i class="fa-solid fa-lightbulb text-xl"></i></div>
+                        <div class="text-teal-800 text-sm md:text-base">
+                            <strong>The Hand-off:</strong> Take the <strong>findings</strong> from NotebookLM and pop them into <strong>Gemini</strong> to plan your support tasks.
+                        </div>
+                    </div>
+
+                    <div class="flow-node border-l-orange-500">
+                        <div class="tool-badge bg-indigo-50 text-indigo-700"><i class="fa-solid fa-users-viewfinder"></i> Gemini</div>
+                        <h3 class="text-xl font-bold text-orange-600 mb-2">3. Strategic Grouping</h3>
+                        <div class="prompt-box" onclick="copyToClipboard(this)">"Review these gaps. Group the class into three tiers based on mastery of [Topic], ensuring those with specific misconceptions are clustered together."</div>
+                        <div class="ai-explain">
+                            <strong>How AI helps:</strong> AI assists with <strong>logistical clustering</strong>, grouping students by the nature of their error rather than just ability.
+                        </div>
+                    </div>
+
+                    <div class="flow-node border-l-purple-500">
+                        <div class="tool-badge bg-indigo-50 text-indigo-700"><i class="fa-solid fa-wand-magic-sparkles"></i> Gemini</div>
+                        <h3 class="text-xl font-bold text-purple-600 mb-2">4. Resource Synthesis</h3>
+                        <p class="text-slate-600 text-sm">Generate targeted scaffolds, word banks, or challenge tasks for each identified group.</p>
+                        <div class="tip-box"><strong>Trick:</strong> Ask Gemini to "Create a 10-minute reteach activity for the group that struggled with [Specific Topic]."</div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4 space-y-8 no-print">
+                    <div class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm">
+                        <h4 class="text-xl font-bold mb-4 text-[#0975A7]">Classroom Example</h4>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-orange-400 text-xs">
+                                <strong>Discovery:</strong> High-attainers failed the <strong>Decimals</strong> section while acing Algebra.
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-orange-400 text-xs">
+                                <strong>Intervention:</strong> Gemini suggests a visual scaffold for the <strong>Decimals</strong> group while others do extensions.
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="window.print()" class="w-full bg-[#0975A7] text-white py-4 rounded-2xl font-bold shadow-lg hover:bg-blue-800 transition">
+                        <i class="fa-solid fa-print mr-2"></i> Print Full Guide
+                    </button>
+                </div>
+            </main>
+        </div>
+
+        <!-- TAB 2: PROMPT BANK -->
+        <div id="prompts" class="tab-content">
+            <header class="bg-slate-800 rounded-3xl p-6 md:p-10 mb-8 md:mb-12 text-white shadow-2xl">
+                <h1 class="text-3xl md:text-4xl font-extrabold mb-3">The AI Prompt Bank</h1>
+                <p class="text-slate-300 text-lg md:text-xl font-light">Click any prompt below to copy it instantly.</p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- NotebookLM Column -->
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-teal-600 flex items-center gap-3">
+                        <i class="fa-solid fa-microchip"></i> NotebookLM (Analysis)
+                    </h2>
+                    
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h4 class="font-bold mb-2">The "Gap Finder"</h4>
+                        <p class="text-xs text-slate-500 mb-3">Find trends in your tracking sheet.</p>
+                        <div class="prompt-box" onclick="copyToClipboard(this)">"Analyze the student data. Identify which specific question or sub-topic has the lowest average score. List the students who struggled with this topic despite having high scores in other areas."</div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h4 class="font-bold mb-2">The "Growth Narrative"</h4>
+                        <p class="text-xs text-slate-500 mb-3">Best for parent meetings or report comments.</p>
+                        <div class="prompt-box" onclick="copyToClipboard(this)">"Looking at the prior knowledge column vs the total score, identify the top 3 'most improved' students and explain exactly which topics they mastered to make that jump."</div>
+                    </div>
+                </div>
+
+                <!-- Gemini Column -->
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-orange-600 flex items-center gap-3">
+                        <i class="fa-solid fa-bolt"></i> Gemini (Action)
+                    </h2>
+                    
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h4 class="font-bold mb-2">The "Three-Tier Task"</h4>
+                        <p class="text-xs text-slate-500 mb-3">Differentiate a lesson task instantly.</p>
+                        <div class="prompt-box" onclick="copyToClipboard(this)">"Based on these groups, create a single lesson task on [Topic]. 
+Tier 1: Scaffolded with a word bank. 
+Tier 2: Standard practice. 
+Tier 3: Abstract challenge with no prompts."</div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h4 class="font-bold mb-2">The "Reteach Script"</h4>
+                        <p class="text-xs text-slate-500 mb-3">Plan a small-group intervention.</p>
+                        <div class="prompt-box" onclick="copyToClipboard(this)">"Write a 5-minute explanation script for a small group intervention focusing on the misconception that [Specific Error]. Use a simple analogy suitable for a 10-year-old."</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: WAYGROUND MCQs -->
+        <div id="wayground" class="tab-content">
+            <header class="bg-purple-700 rounded-3xl p-6 md:p-10 mb-8 md:mb-12 text-white shadow-lg">
+                <h1 class="text-3xl md:text-4xl font-extrabold mb-3">Wayground MCQs</h1>
+                <p class="text-purple-100 text-lg md:text-xl font-light">From Google Docs to Smart Assessments</p>
+            </header>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <div class="flow-node border-l-blue-500">
+                        <div class="tool-badge bg-blue-50 text-blue-700">Google Docs</div>
+                        <h3 class="font-bold text-xl mb-2">1. The Knowledge Source</h3>
+                        <p class="text-slate-600 mb-2">Wayground scans your Doc for key facts. Ensure you use clear headings for the best results.</p>
+                    </div>
+
+                    <div class="flow-node border-l-purple-500">
+                        <div class="tool-badge bg-purple-50 text-purple-700">Wayground</div>
+                        <h3 class="font-bold text-xl mb-2">2. Generating the Quiz</h3>
+                        <p class="text-sm text-slate-600 mb-2">Generate multiple questions instantly. Edit the distractors to target specific misconceptions.</p>
+                    </div>
+
+                    <div class="flow-node border-l-indigo-500">
+                        <div class="tool-badge bg-purple-50 text-purple-700">Accommodations</div>
+                        <h3 class="font-bold text-xl mb-2">3. Smart Scaffolding</h3>
+                        <div class="prompt-box" onclick="copyToClipboard(this)">"Add an image hint for Question 2 for visual learners. Provide a 'Definition Pop-up' for complex tier-three vocabulary."</div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-200 h-fit">
+                    <h4 class="font-bold text-purple-700 mb-4 text-xl">UDL Focus</h4>
+                    <p class="text-sm text-slate-600 mb-4">Make assessments accessible for all learners using Wayground's editing features:</p>
+                    <ul class="text-xs space-y-3 text-slate-500 list-disc pl-4">
+                        <li>Reduce choices to decrease cognitive load.</li>
+                        <li>Add audio support for reading difficulties.</li>
+                        <li>Include immediate feedback for every response.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: SAMPLE DATA -->
+        <div id="merseyside" class="tab-content">
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-200">
+                <div class="p-6 md:p-8 border-b border-slate-100 flex flex-wrap justify-between items-center gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-800">Sample Assessment Data</h1>
+                        <p class="text-sm text-slate-500">Original student data for AI training and testing.</p>
+                    </div>
+                    <button onclick="copyData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-3 rounded-xl font-bold transition">
+                        <i class="fa-solid fa-copy mr-2"></i> Copy CSV for AI
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse min-w-[600px]">
+                        <thead class="bg-slate-50 text-slate-600 font-bold uppercase text-[10px] tracking-wider">
+                            <tr>
+                                <th class="p-4 border-b">Student</th>
+                                <th class="p-4 border-b">Prior (%)</th>
+                                <th class="p-4 border-b">Q1: Fractions</th>
+                                <th class="p-4 border-b">Q3: Decimals</th>
+                                <th class="p-4 border-b">Q5: Algebra</th>
+                                <th class="p-4 border-b">Total (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100" id="data-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-card').forEach(nav => nav.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        const sampleData = [
+            { name: "John Doe", prior: "40%", q1: "5/5", q3: "2/5", q5: "5/5", total: "73%" },
+            { name: "Jane Smith", prior: "30%", q1: "2/5", q3: "4/5", q5: "2/5", total: "57%" },
+            { name: "Robert Jones", prior: "85%", q1: "5/5", q3: "5/5", q5: "5/5", total: "97%" },
+            { name: "Sarah Williams", prior: "20%", q1: "3/5", q3: "1/5", q5: "1/5", total: "33%" },
+            { name: "Michael Brown", prior: "50%", q1: "4/5", q3: "4/5", q5: "1/5", total: "63%" },
+            { name: "Emily Davis", prior: "45%", q1: "2/5", q3: "5/5", q5: "3/5", total: "67%" }
+        ];
+
+        function renderTable() {
+            const body = document.getElementById('data-table-body');
+            body.innerHTML = sampleData.map(row => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="p-4 font-semibold text-slate-800">${row.name}</td>
+                    <td class="p-4 text-slate-500">${row.prior}</td>
+                    <td class="p-4">${row.q1}</td>
+                    <td class="p-4">${row.q3}</td>
+                    <td class="p-4">${row.q5}</td>
+                    <td class="p-4 font-bold text-[#0975A7]">${row.total}</td>
+                </tr>
+            `).join('');
+        }
+
+        function copyToClipboard(element) {
+            const text = element.innerText;
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            const originalColor = element.style.borderColor;
+            const originalText = element.innerText;
+            
+            element.style.borderColor = "#14B8A6";
+            element.innerText = "COPIED TO CLIPBOARD!";
+            
+            setTimeout(() => {
+                element.style.borderColor = originalColor;
+                element.innerText = originalText;
+            }, 1200);
+        }
+
+        function copyData() {
+            const csv = `Student Name,Prior Knowledge,Q1: Fractions,Q3: Decimals,Q5: Algebra,Total (%)
+John Doe,0.4,5/5,2/5,5/5,0.73
+Jane Smith,0.3,2/5,4/5,2/5,0.57
+Robert Jones,0.85,5/5,5/5,5/5,0.97
+Sarah Williams,0.2,3/5,1/5,1/5,0.33
+Michael Brown,0.5,4/5,4/5,1/5,0.63
+Emily Davis,0.45,2/5,5/5,3/5,0.67`;
+            
+            const el = document.createElement('textarea');
+            el.value = csv;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            const btn = document.querySelector('[onclick="copyData()"]');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Copied!';
+            setTimeout(() => { btn.innerHTML = originalHtml; }, 2000);
+        }
+
+        window.onload = renderTable;
+    </script>
+</body>
+</html>
